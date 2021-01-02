@@ -83,7 +83,8 @@ window.addEventListener('load', () => {
 				food = food.filter(ff => ff.x !== f.x && ff.y !== f.y)
 				let tail = snake[snake.length - 1]
 				snake.push(drawRect(tail.x - dx, tail.y - dy))
-				speed = speed * 0.99
+				if (speed > 15)
+					speed = speed * 0.99
 			}
 		})
 	}
@@ -122,31 +123,48 @@ window.addEventListener('load', () => {
 	}
 	init();
 
+	restart = () => {
+		clearInterval(foodInterval);
+		ctx.clearRect(0, 0, c.width, c.height)
+		init();
+	}
+
 	document.addEventListener("keydown", event => {
 		switch (event.keyCode) {
 			case 65:
 			case 37:
 			case 72:
-				dx = -1;
-				dy = 0;
+				if (dx !== 1) {
+					dx = -1;
+					dy = 0;
+				}
 				break;
 			case 83:
 			case 40:
 			case 74:
-				dy = 1;
-				dx = 0;
+				if (dy !== -1) {
+					dy = 1;
+					dx = 0;
+				}
 				break;
 			case 87:
 			case 38:
 			case 75:
-				dy = -1;
-				dx = 0;
+				if (dy !== 1) {
+					dy = -1;
+					dx = 0;
+				}
 				break;
 			case 68:
 			case 39:
 			case 76:
-				dx = 1;
-				dy = 0;
+				if (dx !== -1) {
+					dx = 1;
+					dy = 0;
+				}
+				break;
+			case 82:
+				restart();
 				break;
 			default:
 				break;
@@ -154,8 +172,6 @@ window.addEventListener('load', () => {
 	});
 
 	document.getElementById("restart").addEventListener("click", () => {
-		clearInterval(foodInterval);
-		ctx.clearRect(0, 0, c.width, c.height)
-		init();
+		restart();
 	})
 })
